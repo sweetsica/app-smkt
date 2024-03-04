@@ -18,16 +18,17 @@ class SamplesImport implements ToModel,WithHeadingRow, SkipsEmptyRows
     public function model(array $row)
     {
         return new Sample([
-            'url' => $row['url'] ?? null,
-            'type'=> $row['type'] ?? null,
-            'name'=> $row['name'] ?? null,
-            'age'=> $row['age'] ?? null,
-            'sex'=> $row['sex'] ?? null,
-            'job'=> $row['job'] ?? null,
-            'note'=> $row['note'] ?? null,
-            'theme'=> $row['theme'] ?? null,
-            'area'=> $row['area'] ?? null,
-            'rate'=> $row['rate'] ?? null
+            'user_id' => $row['id_nhan_vien'] ?? null,
+            'url' => $row['duong_dan'] ?? null,
+            'type'=> $row['loai'] ?? null,
+            'name'=> $row['ten'] ?? null,
+            'age'=> $row['tuoi'] ?? null,
+            'sex'=> $row['gioi_tinh'] ?? null,
+            'job'=> $row['nghe_nghiep'] ?? null,
+            'note'=> $row['ghi_chu'] ?? null,
+            'theme'=> $row['chu_de'] ?? null,
+            'area'=> $row['khu_vuc'] ?? null,
+            'rate'=> $row['danh_gia'] ?? null
         ]);
     }
     public function headingRow(): int

@@ -15,12 +15,12 @@ use App\Http\Controllers\SampleController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('template.master');
 })->name('index');
 
-Route::get('/sample/import',[SampleController::class,'index'])->name('sample.import');
+Route::post('/sample/import',[SampleController::class,'importSample'])->name('sample.import');
 
-Route::get('/sample',[SampleController::class,'index'])->name('index');
+Route::get('/sample',[SampleController::class,'index'])->name('sample.index');
 Route::post('/sample/store',[SampleController::class,'store'])->name('sample.store');
 Route::post('/sample/put',[SampleController::class,'update'])->name('sample.update');
 

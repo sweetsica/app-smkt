@@ -1,209 +1,289 @@
-{{--@if(session()->get('access_key')=='allowed'||session()->get('access_key')=='allowed-part')--}}
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>S-HRM</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-</head>
-<body>
-<div style="text-align: center; margin-top:1%">
-    <form method="post" action="{{route('sample.store')}}">
-        @csrf
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th scope="col">*Tên</th>
-                    <th scope="col">Tuổi</th>
-                    <th scope="col">Sex</th>
-                    <th scope="col">Lĩnh vực kinh doanh</th>
-                    <th scope="col">Ghi chú</th>
-                    <th scope="col">Chủ đề</th>
-                    <th scope="col">Khu vực</th>
-                    <th scope="col">Đường link</th>
-                    <th scope="col">Đánh giá</th>
-                    <th scope="col">*Loại</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input class="form-control" type="text" name="name">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="age">
-                    </td>
-                    <td class="form-check">
-                        <input class="form-check-input" type="radio" name="sex">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="job">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="note">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="theme">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="area">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="url">
-                    </td>
-                    <td>
-                        <input class="form-control" type="text" name="rate">
-                    </td>
-                    <td>
-                        <select class="form-select" name="type" aria-label="Default select example">
-                            <option
-                            <option value="1">Người</option>
-                            <option value="2">Nhóm</option>
-                            <option value="3">Chủ đề</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button type="submit">Nhập</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-</div>
+@extends('template.master')
+@section('page-css')
+    <!-- DataTables -->
+    <link href="{{asset('admin/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('admin/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('admin/assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 
-{{--Khách--}}
-<div class="w-auto p-3">
-    <br />
-    <div style="width:100%; float:left; display: flex">
-        <h2 style="width:70%"><a href="#">Danh sách Khách tiềm năng</a></h2>
-{{--        <h3 style="width:30%; float:right"><a href="{{route('logout')}}">Đăng xuất</a></h3>--}}
+    <!-- Responsive datatable examples -->
+    <link href="{{asset('admin/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="{{asset('admin/assets/libs/sweetalert2/sweetalert2.min.css')}}">
+
+    <!-- jquery.vectormap css -->
+
+    <link rel="stylesheet" href="{{asset('admin/assets/libs/morris.js/morris.css')}}" type="text/css" />
+
+    <!-- Bootstrap Css -->
+    <link href="{{asset('admin/assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{{asset('admin/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{{asset('admin/assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+@endsection
+@section('page-content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row card-body" style="display: flex; flex-wrap: nowrap" >
+                            <div class="col-sm-3 col-md-3" style="display: flex; flex-wrap: nowrap; flex: 1 1 5rem">
+                                <form method="post" action="{{route('sample.import')}}" enctype="multipart/form-data">
+                                    @csrf
+                                    <input class="form-control col-md-3" style="flex: 1 1 5rem" type="file" name="sample_file">
+                                    <input type="submit" style="flex: 1 1 5rem; text-align:center" class="col-md-3 btn btn-primary waves-effect waves-light" value="Nhập">
+                                </form>
+                            </div>
+                            <div class="col-sm-6 col-md-6" style="flex: 1 1 5rem">
+                                <input class="btn btn-primary waves-effect waves-light" type="submit" value="Thêm">
+                            </div>
+                        </div>
+                        <form action="{{route('sample.store')}}" method="POST" class="form-control">
+                            @csrf
+                            <div class="table-responsive">
+                                <table class="table table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="width: 100%; display:flex; flex-wrap:wrap">
+                                    <thead>
+                                        <tr>
+                                            <th style="flex: 1 1 5rem;">Loại</th>
+                                            <th style="flex: 1 1 5rem;">Tên</th>
+                                            <th style="flex: 1 1 5rem;">Chủ đề</th>
+                                            <th style="flex: 1 1 5rem;">Ghi chú</th>
+                                            <th style="flex: 1 1 5rem;">Khu vực</th>
+                                            <th style="flex: 1 1 5rem;">Đánh giá ( /10)</th>
+                                            <th style="flex: 1 1 5rem;">URL</th>
+                                            <th style="flex: 1 1 5rem;">Tuổi</th>
+                                            <th style="flex: 1 1 5rem;">Nam(Nữ)</th>
+                                            <th style="flex: 1 1 5rem;">Nghề nghiệp</th>
+                                        </tr>
+                                            <tr>
+                                                <input type="hidden" name="user_id" value="2">
+                                                <td><select class="form-control select2" name="type">
+                                                    <option value></option>
+                                                    <option value='0'>Người dùng</option>
+                                                    <option value='1'>Nhóm</option>
+                                                    <option value='2'>Chủ đề</option>
+                                                </select></td>
+                                                <td><input class="form-control" type='text' name='name'></td>
+                                                <td><input class="form-control" type='text' name='theme'></td>
+                                                <td><input class="form-control" type='text' name='note'></td>
+                                                <td><input class="form-control" type='text' name='area'></td>
+                                                <td><input class="form-control" type='number' name='rate'></td>
+                                                <td><input class="form-control" type='text' name='url'></td>
+                                                <td><input class="form-control" type='number' name='age'></td>
+                                                <td><select class="form-control select2" name="sex">
+                                                    <option value></option>
+                                                    <option value='0'>Nam</option>
+                                                    <option value='1'>Nữ</option>
+                                                </select></td>
+                                                <td><input class="form-control" type='text' name='job'></td>
+                                            </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <table class="table table-bordered" id="edit_sample_datables" data-update-url="#">
-        <thead>
-        <tr>
-            <th style="width:4%;">@sortablelink('id')</th>
-            <th>@sortablelink('name','Tên')</th>
-            <th>@sortablelink('job','Lĩnh vực kinh doanh')</th>
-            <th style="width: 19%;">@sortablelink('theme','Chủ đề')</th>
-            <th style="width: 10%;">@sortablelink('age','Độ tuổi')</th>
-            <th style="width: 10%;">@sortablelink('sex', 'Giới tính')</th>
-            <th style="width: 5%;">@sortablelink('url', 'Link')</th>
-            <th style="width: 5%;">@sortablelink('area', 'Khu vực')</th>
-            <th style="width: 8%;">Ghi chú</th>
-            <th style="width: 10%;">@sortablelink('rate', 'Đánh giá')</th>
-        </tr>
-        </thead>
-            <tbody>
-                @foreach($data['sample_customers'] as $sample_customer)
-                    <tr>
-                        <td data-id="{{$sample_customer->id}}" data-name="id">{{$sample_customer->id}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="name">{{$sample_customer->name}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="job">{{$sample_customer->job}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="theme">{{$sample_customer->theme}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="age">{{$sample_customer->age}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="sex">{{$sample_customer->sex}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="url">{{$sample_customer->url}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="area">{{$sample_customer->area}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="note">{{$sample_customer->note}}</td>
-                        <td data-id="{{$sample_customer->id}}" data-name="rate">{{$sample_customer->rate}}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-    </table>
-{{--    {!! $data['sample_customers']->appends(\Request::except('page'))->render() !!}--}}
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">Nội dung</h4>
 
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li>
+                            Tiềm năng
+                        </li>
+                    </ol>
+                </div>
 
-</div>
-{{--Nhóm--}}
-<div class="w-auto p-3">
-    <br />
-    <div style="width:100%; float:left; display: flex">
-        <h2 style="width:70%"><a href="#">Danh sách Nhóm seeding tiềm năng</a></h2>
-        {{--        <h3 style="width:30%; float:right"><a href="{{route('logout')}}">Đăng xuất</a></h3>--}}
+            </div>
+        </div>
     </div>
-    <table class="table table-bordered" id="edit_sample_datable_2" data-update-url="#">
-        <thead>
-        <tr>
-            <th style="width:4%;">@sortablelink('id')</th>
-            <th>@sortablelink('name','Tên')</th>
-            <th style="width: 19%;">@sortablelink('theme','Chủ đề')</th>
-            <th style="width: 10%;">@sortablelink('age','Độ tuổi')</th>
-            <th style="width: 10%;">@sortablelink('sex', 'Giới tính')</th>
-            <th style="width: 5%;">@sortablelink('url', 'Link')</th>
-            <th style="width: 8%;">Ghi chú</th>
-            <th style="width: 10%;">@sortablelink('rate', 'Đánh giá')</th>
-        </tr>
-        </thead>
-            <tbody>
-            @foreach($data['sample_groups'] as $sample_group)
-                <tr>
-                    <td data-id="{{$sample_group->id}}" data-name="id">{{$sample_group->id}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="name">{{$sample_group->name}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="description">{{$sample_group->description}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="idPosition">{{$sample_group->idPosition}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="idDepartment">{{$sample_group->idDepartment}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="kpiValue">{{$sample_group->kpiValue}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="mandayValue">{{$sample_group->mandayValue}}</td>
-                    <td data-id="{{$sample_group->id}}" data-name="idParentTask">{{$sample_group->idParentTask}}</td>
-                </tr>
-            @endforeach
-            </tbody>
-    </table>
-{{--    {!! $data['sample_groups']->appends(\Request::except('page'))->render() !!}--}}
+    <!-- end page title -->
+    @if($data['sample_customers'] ?? "")
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Khách tiềm năng</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered dt-responsive nowrap" id="datatable-buttons">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="sorting sorting_asc">Tên</th>
+                                        <th>Tuổi</th>
+                                        <th>Giới tính</th>
+                                        <th>Nghề nghiệp</th>
+                                        <th>Ghi chú</th>
+                                        <th>Khu vực</th>
+                                        <th>Đánh giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($data['sample_customers'] as $sample_customer)
+                                    <tr>
+                                        <th scope="row">{!!$sample_customer['id']!!}</th>
+                                        <td>
+                                            @if($sample_customer['url'])
+                                                <a href="{!!$sample_customer['url']?$sample_customer['url']:'#'!!}">
+                                                    {!!$sample_customer['name']!!}
+                                                </a>
+                                            @else
+                                                {!!$sample_customer['name']!!}
+                                            @endif
+                                        </th>
+                                        <td>{!!$sample_customer['age']!!}</th>
+                                        <td>{!! $sample_customer['sex']== 0 ? 'Nam' : 'Nữ' !!}</th>
+                                        <td>{!!$sample_customer['job']!!}</th>
+                                        <td>{!!$sample_customer['note']!!}</th>
+                                        <td>{!!$sample_customer['area']!!}</th>
+                                        <td>{!!$sample_customer['rate']!!}</th>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
+    @if($data['sample_groups'] ?? "")
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Nhóm tiềm năng</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered dt-responsive nowrap" id="datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Tuổi</th>
+                                        <th>Chủ đề</th>
+                                        <th>Ghi chú</th>
+                                        <th>Khu vực</th>
+                                        <th>Đánh giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($data['sample_groups'] as $sample_group)
+                                    <tr>
+                                        <th scope="row">{!!$sample_group['id']!!}</th>
+                                        <td>{!!$sample_group['name']!!}</th>
+                                        <td>{!!$sample_group['age']!!}</th>
+                                        <td>{!!$sample_group['theme']!!}</th>
+                                        <td>{!!$sample_group['note']!!}</th>
+                                        <td>{!!$sample_group['area']!!}</th>
+                                        <td>{!!$sample_group['rate']!!}</th>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if($data['sample_themes'] ?? "")
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Chủ đề tiềm năng</h4>
+                        <div class="table mb-0">
+                            <table class="table table-striped table-bordered dt-responsive nowrap" id="datatable-buttons">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Chủ đề</th>
+                                        <th>Ghi chú</th>
+                                        <th>Khu vực</th>
+                                        <th>Đánh giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($data['sample_themes'] as $sample_theme)
+                                    <tr>
+                                        <th scope="row">{!!$sample_theme['id']!!}</th>
+                                        <td>{!!$sample_theme['name']!!}</th>
+                                        <td>{!!$sample_theme['theme']!!}</th>
+                                        <td>{!!$sample_theme['note']!!}</th>
+                                        <td>{!!$sample_theme['area']!!}</th>
+                                        <td>{!!$sample_theme['rate']!!}</th>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
-{{--Chủ đề--}}
-<div class="w-auto p-3">
-    <br />
-    <div style="width:100%; float:left; display: flex">
-        <h2 style="width:70%"><a href="#">Danh sách chủ đề tiềm năng</a></h2>
-        {{--        <h3 style="width:30%; float:right"><a href="{{route('logout')}}">Đăng xuất</a></h3>--}}
-    </div>
-    <table class="table table-bordered" id="edit_sample_datable_3" data-update-url="#">
-        <thead>
-            <tr>
-                    <th style="width:4%;">@sortablelink('id')</th>
-                    <th>@sortablelink('name','Tên')</th>
-                    <th style="width: 19%;">@sortablelink('theme','Chủ đề')</th>
-                    <th style="width: 10%;">@sortablelink('age','Độ tuổi')</th>
-                    <th style="width: 10%;">@sortablelink('sex', 'Giới tính')</th>
-                    <th style="width: 5%;">@sortablelink('url', 'Link')</th>
-                    <th style="width: 8%;">Ghi chú</th>
-                    <th style="width: 10%;">@sortablelink('rate', 'Đánh giá')</th>
-                </tr>
-        </thead>
-            <tbody>
-                @foreach($data['sample_themes'] as $sample_theme)
-                    <tr>
-                        <td data-id="{{$sample_theme->id}}" data-name="id">{{$sample_theme->id}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="name">{{$sample_theme->name}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="description">{{$sample_theme->description}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="idPosition">{{$sample_theme->idPosition}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="idDepartment">{{$sample_theme->idDepartment}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="kpiValue">{{$sample_theme->kpiValue}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="mandayValue">{{$sample_theme->mandayValue}}</td>
-                        <td data-id="{{$sample_theme->id}}" data-name="idParentTask">{{$sample_theme->idParentTask}}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-    </table>
-{{--    {!! $data['sample_themes']->appends(\Request::except('page'))->render() !!}--}}
+@endsection
+@section('page-js')
+    <!-- JAVASCRIPT -->
+    <script src="{{asset('admin/assets/libs/morris.js/morris.min.js')}}"></script>
 
-</div>
-<!-- jQuery -->
-{{--<script src="{{asset('js/edit-table/jquery.min.js')}}"></script>--}}
+    <script src="{{asset('admin/assets/libs/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/metismenu/metisMenu.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/simplebar/simplebar.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/node-waves/waves.min.js')}}"></script>
 
-<script src="{{asset('js/edit-table/jquery.slimscroll.js')}}"></script>
-<script src="{{asset('js/edit-table/edit-sample-table-data.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/raphael/raphael.min.js')}}"></script>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-</html>
-{{--@else--}}
-{{--    <script>--}}
-{{--        window.location.href = "https://soundcloud.com/iamkanjo/thang-da-xem-live-at-montauk";--}}
-{{--    </script>--}}
-{{--@endif--}}
+    <script src="{{asset('admin/assets/js/pages/dashboard.init.js')}}"></script>
+
+    <!-- App js -->
+    <script src="{{asset('admin/assets/js/app.js')}}"></script>
+
+    <script src="{{asset('admin/assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
+
+    <script src="{{asset('admin/assets/js/pages/sweet-alerts.init.js')}}"></script>
+
+    <!-- Required datatable js -->
+    <script src="{{asset('admin/assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+
+    <!-- Datatable init js -->
+    <script src="{{asset('admin/assets/js/pages/datatables.init.js')}}"></script>
+
+    <script src="{{asset('admin/assets/js/app.js')}}"></script>
+
+    <!-- Buttons examples -->
+    <script src="{{asset('admin/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/jszip/jszip.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/pdfmake/build/vfs_fonts.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
+
+    <script src="{{asset('admin/assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
+
+    <!-- Responsive examples -->
+    <script src="{{asset('admin/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('admin/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
+
+    <script src="{{asset('admin/assets/libs/select2/js/select2.min.js')}}"></script>
+
+@endsection

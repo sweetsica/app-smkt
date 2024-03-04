@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SamplesImport;
 use App\Models\Sample;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SampleController extends Controller
 {
     public function index(){
-        $data['sample_customers'] = Sample::where('type','=','1')->get();
-        $data['sample_groups'] = Sample::where('type','=','2')->get();
-        $data['sample_themes'] = Sample::where('type','=','3')->get();
+        $data['sample_customers'] = Sample::where('type','=','0')->get();
+        $data['sample_groups'] = Sample::where('type','=','1')->get();
+        $data['sample_themes'] = Sample::where('type','=','2')->get();
         return view('sample.index',compact('data'));
     }
 
@@ -21,7 +23,7 @@ class SampleController extends Controller
 
     public function store(Request $request){
         Sample::create($request->all());
-        return redirect()->route('index');
+        return redirect()->route('sample.index');
     }
 
     public function update(Request $request){
@@ -64,5 +66,11 @@ class SampleController extends Controller
     public function edit($id)
     {
         //
+    }
+
+    public function importSample(Request $request){
+        $url = $request->file('sample_file');
+        Excel::import(new SamplesImport,$url,null,\Maatwebsite\Excel\Excel::XLSX);
+        return redirect()->back();
     }
 }
