@@ -30,15 +30,13 @@
                     <div class="card-body">
                         <div class="row card-body" style="display: flex; flex-wrap: nowrap" >
                             <div class="col-sm-3 col-md-3" style="display: flex; flex-wrap: nowrap; flex: 1 1 5rem">
-                                <form method="post" action="{{route('sample.import')}}" enctype="multipart/form-data">
+                                <form method="post" action="{{route('sample.import')}}" enctype="multipart/form-data" style="display: inline-flex;">
                                     @csrf
                                     <input class="form-control col-md-3" style="flex: 1 1 5rem" type="file" name="sample_file">
                                     <input type="submit" style="flex: 1 1 5rem; text-align:center" class="col-md-3 btn btn-primary waves-effect waves-light" value="Nhập">
                                 </form>
                             </div>
-                            <div class="col-sm-6 col-md-6" style="flex: 1 1 5rem">
-                                <input class="btn btn-primary waves-effect waves-light" type="submit" value="Thêm">
-                            </div>
+
                         </div>
                         <form action="{{route('sample.store')}}" method="POST" class="form-control">
                             @csrf
@@ -81,6 +79,9 @@
                                             </tr>
                                     </thead>
                                 </table>
+                            </div>
+                            <div class="col-sm-6 col-md-6" style="flex: 1 1 5rem">
+                                <input class="btn btn-primary waves-effect waves-light" type="submit" value="Thêm">
                             </div>
                         </form>
                     </div>

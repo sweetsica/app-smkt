@@ -10,9 +10,9 @@ use Maatwebsite\Excel\Facades\Excel;
 class SampleController extends Controller
 {
     public function index(){
-        $data['sample_customers'] = Sample::where('type','=','0')->get();
-        $data['sample_groups'] = Sample::where('type','=','1')->get();
-        $data['sample_themes'] = Sample::where('type','=','2')->get();
+        $data['sample_customers'] = Sample::where('type','=','0')->orderBy('id', 'desc')->take(100)->get();
+        $data['sample_groups'] = Sample::where('type','=','1')->orderBy('id', 'desc')->take(100)->get();
+        $data['sample_themes'] = Sample::where('type','=','2')->orderBy('id', 'desc')->take(100)->get();
         return view('sample.index',compact('data'));
     }
 
