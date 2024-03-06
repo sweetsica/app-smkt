@@ -181,13 +181,15 @@
                                     @foreach($data['sample_groups'] as $sample_group)
                                     <tr>
                                         <th scope="row">{!!$sample_group['id']!!}</th>
-                                        @if($sample_group['url'])
+                                        <td>
+                                            @if($sample_group['url'])
                                                 <a href="{!!$sample_group['url']?$sample_group['url']:'#'!!}">
                                                     {!!$sample_group['name']!!}
                                                 </a>
                                             @else
                                                 {!!$sample_group['name']!!}
                                             @endif
+                                        </td>
                                         <td>{!!$sample_group['age']!!}</th>
                                         <td>{!!$sample_group['theme']!!}</th>
                                         <td>{!!$sample_group['note']!!}</th>
