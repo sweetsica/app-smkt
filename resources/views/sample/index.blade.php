@@ -183,7 +183,7 @@
                                         <th scope="row">{!!$sample_group['id']!!}</th>
                                         <td>
                                             @if($sample_group['url'])
-                                                <a href="{!!$sample_group['url']?$sample_group['url']:'#'!!}">
+                                                <a href="{!!$sample_group['url']?$sample_group['url']:'#'!!}" target="_blank">
                                                     {!!$sample_group['name']!!}
                                                 </a>
                                             @else
