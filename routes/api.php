@@ -31,3 +31,5 @@ Route::group(['middleware' => 'auth:api'], function() {
 });
 
 Route::get('/login',[AuthController::class,'login'])->name('login');
+
+Route::get('/cf7',[SampleController::class, 'collectData']);

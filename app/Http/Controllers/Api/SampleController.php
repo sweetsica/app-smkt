@@ -12,4 +12,7 @@ class SampleController extends Controller
         $data = Sample::all();
         return response()->json($data,200);
     }
+    public function collectData(Request $request){
+        return response()->json($request,200);
+    }
 }
