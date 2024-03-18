@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Models\Test;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 Route::get('/login',[AuthController::class,'login'])->name('login');
 
 Route::get('/cf7',[SampleController::class, 'collectData']);
+
+Route::post('/checkAPI',[SampleController::class, 'checkApi']);
+Route::get('/showCheck',function(){
+    dd(Test::all());
+});
