@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SampleController;
+use App\Http\Controllers\Api\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,5 @@ Route::post('/sample/put',[SampleController::class,'update'])->name('sample.upda
 
 
 //Route::resource('/sample',SampleController::class);
+
+Route::get('/light',[TestController::class,'light'])->name('light');

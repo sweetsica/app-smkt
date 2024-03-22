@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\SampleController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TestController;
+use App\Http\Controllers\Api\SampleController;
 use App\Models\Test;
 
 /*
@@ -35,7 +37,5 @@ Route::get('/login',[AuthController::class,'login'])->name('login');
 
 Route::get('/cf7',[SampleController::class, 'collectData']);
 
-Route::post('/checkAPI',[SampleController::class, 'checkApi']);
-Route::get('/showCheck',function(){
-    dd(Test::all());
-});
+Route::post('/switchLight',[TestController::class, 'switchLight'])->name('switchLight');
+Route::get('/light',[TestController::class,'light'])->name('light');
