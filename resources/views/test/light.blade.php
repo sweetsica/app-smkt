@@ -6,7 +6,8 @@
         @else
             <img src="{{ asset('admin/assets/images/off.jpg') }}">
         @endif
+    @else
+        <img src="{{ asset('admin/assets/images/off.jpg') }}">
     @endif
-    <img src="{{ asset('admin/assets/images/off.jpg') }}">
 
 @endsection
